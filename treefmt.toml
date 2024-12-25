@@ -1,0 +1,17 @@
+[formatter.gofmt]
+command = "gofmt"
+excludes = ["vendor/*"]
+includes = ["*.go"]
+options = ["-w"]
+
+[formatter.nix]
+command = "nixfmt"
+excludes = []
+includes = ["*.nix"]
+options = []
+
+[formatter.toml-sort]
+command = "toml-sort"
+excludes = []
+includes = ["*.toml"]
+options = ["-i"]
