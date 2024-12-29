@@ -24,7 +24,7 @@ darkvisitors {
 
 - **access_token** sets the OAuth authorization token used to communicate with the Dark Visitors API. Global placeholders are supported in the argument.
 - **robots_txt** enables generation of robots.txt derived from agent analytics data using the Dark Visitors API.
-  - **agent_types** specifies a list of [agent types](https://darkvisitors.com/agents) to be blocked by the generated robots.txt. The special token "*" is supported as an argument which resolves to all documented agent types. If this token is passed, there must be no further arguments.
+  - **agent_types** specifies a list of [agent types](https://darkvisitors.com/agents) to be blocked by the generated robots.txt. The special token "\*" is supported as an argument which resolves to all documented agent types. Note: when "\*" is passed, there must be no further arguments.
   - **disallow** specifies the path to disallow for the specified agent types. Default: `/`.
 
 If the `robots_txt` block is configured, then the special variable `http.vars.dv_robots_txt` in the HTTP request context will be set to the raw content of the robots.txt returned by the Dark Visitors API. Note: the robots.txt query is performed once during the provision phase of the module lifecycle and cached thereafter.
