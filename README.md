@@ -1,6 +1,6 @@
 # Caddy Darkvisitors Module
 
-A super simple [Caddy](https://caddyserver.com/) module to send visit events to the [Dark Visitors API](https://darkvisitors.com/docs/analytics).
+A super simple [Caddy](https://caddyserver.com/) module for interacting with the [Dark Visitors API](https://darkvisitors.com/docs/analytics).
 
 ## Building
 
@@ -8,16 +8,26 @@ To compile this Caddy module, follow the instructions from [Build from Source](h
 
 ## Configuration
 
-A basic Caddyfile configuration is provided below:
+### Syntax
 
 ```Caddyfile
 darkvisitors {
-  # endpoint https://api.darkvisitors.com/visits
-  access_token {env.DV_ACCESS_TOKEN}
+  access_token <token>
+  robots_txt {
+    agent_types <types...>
+    disallow <path>
+  }
 }
 ```
 
-By default, the `darkvisitors` directive is ordered after [`route`](https://caddyserver.com/docs/caddyfile/directives#directive-route) in the Caddyfile. If this order does not fit your needs, you can change the order using the global [`order`](https://caddyserver.com/docs/caddyfile/directives#directive-order) directive. For example:
+- **access_token** sets the OAuth authorization token used to communicate with the Dark Visitors API. Global placeholders are supported in the argument.
+- **robots_txt** enables generation of robots.txt derived from agent analytics data using the Dark Visitors API.
+  - **agent_types** specifies a list of [agent types](https://darkvisitors.com/agents) to be blocked by the generated robots.txt. The special token "*" is supported as an argument which resolves to all documented agent types. If this token is passed, there must be no further arguments.
+  - **disallow** specifies the path to disallow for the specified agent types. Default: `/`.
+
+If the `robots_txt` block is configured, then the special variable `http.vars.dv_robots_txt` in the HTTP request context will be set to the raw content of the robots.txt returned by the Dark Visitors API. Note: the robots.txt query is performed once during the provision phase of the module lifecycle and cached thereafter.
+
+By default, the `darkvisitors` directive is ordered before [`header`](https://caddyserver.com/docs/caddyfile/directives#directive-header) in the Caddyfile. This ensures that the raw request content (sensitive data such as cookies are still stripped) is used to build a visit event. If this order does not fit your needs, you can change the order using the global [`order`](https://caddyserver.com/docs/caddyfile/directives#directive-order) directive. For example:
 
 ```Caddyfile
 {
@@ -25,4 +35,22 @@ By default, the `darkvisitors` directive is ordered after [`route`](https://cadd
 }
 ```
 
-Global placeholders are supported in the `darkvisitors` block.
+### Example
+
+A basic Caddyfile configuration is provided below:
+
+```Caddyfile
+darkvisitors {
+  access_token {env.DV_ACCESS_TOKEN}
+  robots_txt {
+    agent_types "AI Assistant" "AI Data Scraper"
+    disallow /
+  }
+}
+```
+
+## License
+
+Copyright (c) 2024 polykernel
+
+The source code in this repository is made avaliable under the [MIT](https://opensource.org/license/mit) license.
