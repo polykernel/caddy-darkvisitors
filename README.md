@@ -1,5 +1,7 @@
 # Caddy Darkvisitors Module
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/polykernel/caddy-darkvisitors.svg)](https://pkg.go.dev/github.com/polykernel/caddy-darkvisitors)
+
 A super simple [Caddy](https://caddyserver.com/) module for interacting with the [Dark Visitors API](https://darkvisitors.com/docs/analytics).
 
 ## Building
