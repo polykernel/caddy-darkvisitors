@@ -1,0 +1,8 @@
+[files]
+extend-exclude = [
+  "typos.toml",
+  "go.mod",
+  "go.sum",
+  "flake.lock",
+  "devenv_root"
+]

@@ -55,4 +55,4 @@ darkvisitors {
 
 Copyright (c) 2024 polykernel
 
-The source code in this repository is made avaliable under the [MIT](https://opensource.org/license/mit) license.
+The source code in this repository is made available under the [MIT](https://spdx.org/licenses/MIT.html) or [Apache 2.0](https://spdx.org/licenses/Apache-2.0.html) license.

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 polykernel
+// SPDX-License-Identifier: MIT or Apache-2.0
+
 package caddydarkvisitors
 
 import (

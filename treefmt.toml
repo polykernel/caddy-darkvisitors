@@ -15,3 +15,9 @@ command = "toml-sort"
 excludes = []
 includes = ["*.toml"]
 options = ["-i"]
+
+[formatter.typos]
+command = "typos"
+excludes = []
+includes = ["."]
+options = []

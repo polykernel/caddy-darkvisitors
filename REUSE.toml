@@ -1,0 +1,20 @@
+version = 1
+
+[[annotations]]
+path = [
+  ".editorconfig",
+  ".envrc",
+  "devenv_root",
+  "treefmt.toml",
+  "typos.toml",
+  ".gitattributes",
+  ".gitignore",
+  "go.mod",
+  "go.sum",
+  "flake.lock",
+  "flake.nix",
+  "devenv.nix",
+  "README.md"
+]
+SPDX-FileCopyrightText = "NONE"
+SPDX-License-Identifier = "CC0-1.0"
