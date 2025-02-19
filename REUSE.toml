@@ -4,16 +4,13 @@ version = 1
 path = [
   ".editorconfig",
   ".envrc",
-  "devenv_root",
   "treefmt.toml",
   "typos.toml",
-  ".gitattributes",
   ".gitignore",
   "go.mod",
   "go.sum",
   "flake.lock",
   "flake.nix",
-  "devenv.nix",
   "README.md"
 ]
 SPDX-FileCopyrightText = "NONE"

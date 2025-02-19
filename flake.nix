@@ -4,15 +4,9 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    devenv.url = "github:cachix/devenv";
-    devenv.inputs.nixpkgs.follows = "nixpkgs";
+    pre-commit-hooks.url = "github:cachix/git-hooks.nix";
 
     flake-utils.url = "github:numtide/flake-utils";
-  };
-
-  nixConfig = {
-    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
-    extra-substituters = "https://devenv.cachix.org";
   };
 
   outputs =
@@ -31,31 +25,37 @@
             config = { };
             overlays = [ ];
           };
+
+          goPackage = pkgs.go;
+          buildGoModule = pkgs.buildGoModule.override { go = goPackage; };
+          buildWithSpecificGo = pkg: pkg.override { inherit buildGoModule; };
         in
         nixpkgs.lib.fix (_self: {
-          packages = {
-            devenv-up = _self.devShells.default.config.procfileScript;
-            devenv-test = _self.devShells.default.config.test;
+          checks = {
+            pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              hooks = {
+                treefmt = {
+                  enable = true;
+                  settings.formatters = [
+                    goPackage
+                    pkgs.nixfmt-rfc-style
+                    pkgs.typos
+                    pkgs.toml-sort
+                  ];
+                };
+                reuse.enable = true;
+              };
+            };
           };
 
-          devShells = {
-            default = inputs.devenv.lib.mkShell {
-              inherit inputs pkgs;
-              modules = [
-                (
-                  { lib, ... }:
-                  {
-                    devenv.root =
-                      let
-                        devenvRootFileContent = builtins.readFile ./devenv_root;
-                      in
-                      pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
-                  }
-                )
-
-                ./devenv.nix
-              ];
-            };
+          devShells.default = pkgs.mkShell {
+            inherit (_self.checks.pre-commit-check) shellHook;
+            nativeBuildInputs = [
+              goPackage
+              (buildWithSpecificGo pkgs.xcaddy)
+              (buildWithSpecificGo pkgs.pkgsite)
+            ] ++ _self.checks.pre-commit-check.enabledPackages;
           };
         });
     in
